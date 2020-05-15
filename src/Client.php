@@ -19,21 +19,28 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @method AccountResource getAccountResource()
  * @method ChannelResource getChannelResource()
- * @method ChannelImagesResource getChannelImagesResource()
+ * @method ChannelImagesResource getChannelImageResource()
  * @method ProviderResource getProviderResource()
  */
 class Client
 {
     const PROVIDER = 'provider';
     const CHANNEL = 'channel';
-    const CHANNEL_IMAGES = 'channelimages';
+    const CHANNEL_IMAGE = 'channelimage';
     const ACCOUNT = 'account';
 
     private static $apiResources = [
-        self::ACCOUNT        => AccountResource::class,
-        self::CHANNEL        => ChannelResource::class,
-        self::CHANNEL_IMAGES => ChannelImagesResource::class,
-        self::PROVIDER       => ProviderResource::class,
+        self::ACCOUNT       => AccountResource::class,
+        self::CHANNEL       => ChannelResource::class,
+        self::CHANNEL_IMAGE => ChannelImagesResource::class,
+        self::PROVIDER      => ProviderResource::class,
+    ];
+
+    private static $apiContexts = [
+        self::ACCOUNT       => Account::class,
+        self::CHANNEL       => Channel::class,
+        self::CHANNEL_IMAGE => ChannelImage::class,
+        self::PROVIDER      => Provider::class,
     ];
 
     /** @var ConfigInterface */
@@ -51,12 +58,7 @@ class Client
     public function contextFactory()
     {
         if (!$this->contextFactory) {
-            $this->contextFactory = new ContextFactory([
-                'Account'      => Account::class,
-                'Channel'      => Channel::class,
-                'ChannelImage' => ChannelImage::class,
-                'Provider'     => Provider::class,
-            ]);
+            $this->contextFactory = new ContextFactory(self::$apiContexts);
         }
 
         return $this->contextFactory;

@@ -90,7 +90,7 @@ class ChannelResourceTest extends CustomApiTestCase
         $image->uri = 'http://localhost/phpunit.png';
 
         /** @var ChannelImage $content */
-        $content = $this->client->getChannelImagesResource()
+        $content = $this->client->getChannelImageResource()
             ->addImageToChannel($image, $channel)
             ->exec()
             ->getSingleResult();
@@ -99,7 +99,7 @@ class ChannelResourceTest extends CustomApiTestCase
 
         // Две одинаковых картинки добавить нельзя
         $this->expectException(\RuntimeException::class);
-        $this->client->getChannelImagesResource()
+        $this->client->getChannelImageResource()
             ->addImageToChannel($image, $channel)
             ->exec();
     }

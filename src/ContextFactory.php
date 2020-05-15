@@ -62,6 +62,7 @@ class ContextFactory
      */
     protected function getContextClass($type)
     {
+        $type = strtolower(str_replace('_', '', $type));
         if (array_key_exists($type, $this->knownContexts) && class_exists($this->knownContexts[$type])) {
             return $this->knownContexts[$type];
         }

@@ -113,7 +113,7 @@ class ResourceTest extends CustomTestCase
         $this->clientMock = $this->getMockBuilder(Client::class)->setConstructorArgs([$config])->getMock();
         $this->clientMock->method('request')->willReturn($this->response);
         $this->clientMock->method('contextFactory')->willReturn(new ContextFactory([
-            'Dummy' => DummyContext::class,
+            'dummy' => DummyContext::class,
         ]));
         $this->resource = new DummyResource($this->clientMock);
     }
