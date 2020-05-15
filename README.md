@@ -7,7 +7,7 @@ $ composer require utelecom/epg-client
 ```
 
 Than you need to implement `\EpgClient\ConfigInterface` on you project. 
-It's would be a persistent storage for client config variables.
+It would be persistent storage for client config variables.
 
 ## Initialization
 
