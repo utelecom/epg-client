@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit
+        colors="true"
+        bootstrap="tests/bootstrap.php">
+    <php>
+        <env name="API_URL" value="" />
+        <env name="API_ADMIN" value="" />
+        <env name="API_PASSWORD" value="" />
+        <env name="ACCOUNT_NAME" value="" />
+        <env name="ACCOUNT_LOCATION" value="" />
+    </php>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
