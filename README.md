@@ -1,12 +1,12 @@
-# HTTP Client for EPG sevice
+# HTTP Client for EPG service
 
 ## Installation
 
 ```
-$ composer require utelecom/epg-client
+$ composer require utelecom/epg-client ^0.1
 ```
 
-Than you need to implement `\EpgClient\ConfigInterface` on you project. 
+Then you need to implement `\EpgClient\ConfigInterface` on you project. 
 It would be persistent storage for client config variables.
 
 ## Initialization
