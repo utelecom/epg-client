@@ -143,9 +143,10 @@ abstract class AbstractResource
     }
 
     /**
+     * @param array $options Allowed options: `indexBy`
      * @return AbstractContext[]
      */
-    public function getArrayResult()
+    public function getArrayResult($options = [])
     {
         $data = $this->client->responseToArray($this->response);
         if (!self::contentLookLikeCollection($data)) {
@@ -154,7 +155,13 @@ abstract class AbstractResource
 
         $content = [];
         foreach (self::contentParseCollectionItems($data) as $item) {
-            $content[] = $this->client->contextFactory()->createFromRaw($item);
+            $context = $this->client->contextFactory()->createFromRaw($item);
+            if (isset($options['indexBy']) and $context->propertyExist($options['indexBy'])) {
+                $propertyValue = $context->__get($options['indexBy']);
+                $content[$propertyValue] = $context;
+            } else {
+                $content[] = $context;
+            }
         }
 
         return $content;
