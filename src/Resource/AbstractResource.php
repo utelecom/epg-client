@@ -25,6 +25,8 @@ abstract class AbstractResource
     protected $filters = [];
     /** @var array */
     protected $groups = [];
+    /** @var array */
+    private $options;
 
     public function __construct(Client $client)
     {
@@ -167,13 +169,9 @@ abstract class AbstractResource
         }
 
         $query = [];
-        if ($this->filters) {
-            $query += $this->filters;
-        }
-
-        if ($this->groups) {
-            $query['groups'] = array_keys($this->groups);
-        }
+        !empty($this->options) and $query += $this->options;
+        !empty($this->filters) and $query += $this->filters;
+        !empty($this->groups) and $query['groups'] = array_keys($this->groups);
 
         $location = $this->location;
         if ($query) {
@@ -212,6 +210,13 @@ abstract class AbstractResource
     public function withGroup($groupName)
     {
         $this->groups[$groupName] = true;
+
+        return $this;
+    }
+
+    public function disablePagination()
+    {
+        $this->options['pagination'] = false;
 
         return $this;
     }
