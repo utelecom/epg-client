@@ -20,6 +20,7 @@ class ChannelResourceTest extends CustomApiTestCase
             ->getArrayResult();
 
         $this->assertApiResponseCollection(Channel::class, $content);
+
         return current($content);
     }
 
@@ -34,6 +35,7 @@ class ChannelResourceTest extends CustomApiTestCase
             ->post($context)
             ->exec()
             ->getSingleResult();
+
         $this->assertApiResponseSingleResult(Channel::class, $content);
         $this->assertEquals('phpUnit', $content->externalId);
         $this->assertEquals('phpUnit', $content->__get('translations')['en']['title']);

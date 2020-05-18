@@ -4,6 +4,7 @@ namespace EpgClient\Tests\Integration;
 
 use EpgClient\ConfigInterface;
 use EpgClient\Context\Account;
+use EpgClient\Context\Category;
 use EpgClient\Context\Channel;
 use EpgClient\Tests\CustomApiTestCase;
 
@@ -23,6 +24,7 @@ class AccountResourceTest extends CustomApiTestCase
             ->getSingleResult();
 
         $this->assertApiResponseSingleResult(Account::class, $content);
+
         return $content;
     }
 
@@ -60,6 +62,7 @@ class AccountResourceTest extends CustomApiTestCase
             ->getArrayResult();
 
         $this->assertApiResponseCollection(Channel::class, $content);
+
         return reset($content);
     }
 
@@ -76,6 +79,59 @@ class AccountResourceTest extends CustomApiTestCase
             ->getSingleResult();
 
         $this->assertApiResponseSingleResult(Channel::class, $content);
+    }
+
+    /**
+     * @depends      testGetAccountByName
+     * @param Account $account
+     */
+    public function testAddCategoryToAccount(Account $account)
+    {
+        $context = $this->client->contextFactory()->createCategory();
+        $context->externalId = 'phpUnit Category' . time();
+        $context->account = $account;
+
+        /** @var Channel $content */
+        $content = $this->client->getCategoryResource()
+            ->addCategoryToAccount($context, $account)
+            ->exec()
+            ->getSingleResult();
+
+        $this->assertApiResponseSingleResult(Category::class, $content);
+        $this->assertEquals($account->getLocation(), $content->account);
+        $this->assertEquals($context->externalId, $content->externalId);
+    }
+
+    /**
+     * @depends      testGetAccountByName
+     * @param Account $account
+     * @return Channel
+     */
+    public function testGetCategories(Account $account)
+    {
+        $content = $this->client->getAccountResource()
+            ->getCategories($account->getLocation())
+            ->exec()
+            ->getArrayResult();
+
+        $this->assertApiResponseCollection(Category::class, $content);
+
+        return reset($content);
+    }
+
+    /**
+     * @depends      testGetCategories
+     * @param Category $category
+     */
+    public function testGetCategoryByExternalId(Category $category)
+    {
+        $content = $this->client->getAccountResource()
+            ->getCategories($category->account)
+            ->addFilter('externalId', $category->externalId)
+            ->exec()
+            ->getSingleResult();
+
+        $this->assertApiResponseSingleResult(Category::class, $content);
     }
 
     protected function setUp()

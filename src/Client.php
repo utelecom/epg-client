@@ -3,11 +3,13 @@
 namespace EpgClient;
 
 use EpgClient\Context\Account;
+use EpgClient\Context\Category;
 use EpgClient\Context\Channel;
 use EpgClient\Context\ChannelImage;
 use EpgClient\Context\Provider;
 use EpgClient\Resource\AbstractResource;
 use EpgClient\Resource\AccountResource;
+use EpgClient\Resource\CategoryResource;
 use EpgClient\Resource\ChannelImagesResource;
 use EpgClient\Resource\ChannelResource;
 use EpgClient\Resource\ProviderResource;
@@ -21,26 +23,30 @@ use Psr\Http\Message\ResponseInterface;
  * @method ChannelResource getChannelResource()
  * @method ChannelImagesResource getChannelImageResource()
  * @method ProviderResource getProviderResource()
+ * @method CategoryResource getCategoryResource()
  */
 class Client
 {
+    const ACCOUNT = 'account';
     const PROVIDER = 'provider';
     const CHANNEL = 'channel';
     const CHANNEL_IMAGE = 'channelimage';
-    const ACCOUNT = 'account';
+    const CATEGORY = 'category';
 
     private static $apiResources = [
         self::ACCOUNT       => AccountResource::class,
+        self::PROVIDER      => ProviderResource::class,
         self::CHANNEL       => ChannelResource::class,
         self::CHANNEL_IMAGE => ChannelImagesResource::class,
-        self::PROVIDER      => ProviderResource::class,
+        self::CATEGORY      => CategoryResource::class,
     ];
 
     private static $apiContexts = [
         self::ACCOUNT       => Account::class,
+        self::PROVIDER      => Provider::class,
         self::CHANNEL       => Channel::class,
         self::CHANNEL_IMAGE => ChannelImage::class,
-        self::PROVIDER      => Provider::class,
+        self::CATEGORY      => Category::class,
     ];
 
     /** @var ConfigInterface */

@@ -20,6 +20,7 @@ class ProviderResourceTest extends CustomApiTestCase
             ->getArrayResult();
 
         $this->assertApiResponseCollection(Provider::class, $content);
+
         return current($content);
     }
 
@@ -36,6 +37,7 @@ class ProviderResourceTest extends CustomApiTestCase
             ->getArrayResult();
 
         $this->assertApiResponseCollection(Channel::class, $content);
+
         return reset($content);
     }
 

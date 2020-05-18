@@ -14,4 +14,13 @@ class AccountResource extends AbstractResource
 
         return $this;
     }
+
+    public function getCategories($accountLocation)
+    {
+        $this->reset();
+        $this->location = $accountLocation . '/categories';
+        $this->method = 'GET';
+
+        return $this;
+    }
 }
