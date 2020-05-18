@@ -44,4 +44,9 @@ abstract class AbstractContext implements JsonSerializable
     {
         return !$this->getLocation();
     }
+
+    public function propertyExist($property)
+    {
+        return array_key_exists($property, $this->data);
+    }
 }

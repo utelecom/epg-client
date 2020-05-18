@@ -73,7 +73,6 @@ class ResourceTest extends CustomTestCase
         ];
     }
 
-
     /**
      * @dataProvider getOneProvider
      * @param array $responseData
