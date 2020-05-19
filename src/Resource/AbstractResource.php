@@ -191,7 +191,8 @@ abstract class AbstractResource
             $body = $this->client->responseToArray($this->response);
             throw new \RuntimeException(sprintf("Error %s: %s.\nResource %s.\nBody: %s",
                 $this->response->getStatusCode(),
-                $this->response->getReasonPhrase(), get_class($this),
+                $this->response->getReasonPhrase(),
+                get_class($this),
                 var_export($body, true)
             ));
         }

@@ -3,6 +3,7 @@
 namespace EpgClient\Tests\Integration;
 
 use EpgClient\Context\Category;
+use EpgClient\Context\CategoryImage;
 use EpgClient\Tests\CustomApiTestCase;
 
 /**
@@ -81,44 +82,45 @@ class CategoryResourceTest extends CustomApiTestCase
         $this->assertEquals('phpUnit Category New', $content->__get('translations')['uk']['title']);
     }
 
-//    /**
-//     * @depends testCreateChannel
-//     * @param Channel $channel
-//     */
-//    public function testAddImageToChannel(Channel $channel)
-//    {
-//        $image = $this->client->contextFactory()->createChannelImage();
-//        $image->uri = 'http://localhost/phpunit.png';
-//
-//        /** @var ChannelImage $content */
-//        $content = $this->client->getChannelImageResource()
-//            ->addImageToChannel($image, $channel)
-//            ->exec()
-//            ->getSingleResult();
-//        $this->assertApiResponseSingleResult(ChannelImage::class, $content);
-//        $this->assertEquals($channel->getLocation(), $content->channel);
-//
-//        // Две одинаковых картинки добавить нельзя
-//        $this->expectException(\RuntimeException::class);
-//        $this->client->getChannelImageResource()
-//            ->addImageToChannel($image, $channel)
-//            ->exec();
-//    }
-//
-//    /**
-//     * @depends testCreateChannel
-//     * @param Channel $channel
-//     */
-//    public function testGetImagesByChannel(Channel $channel)
-//    {
-//        $content = $this->client->getChannelResource()
-//            ->getImages($channel->getLocation())
-//            ->exec()
-//            ->getArrayResult();
-//
-//        $this->assertApiResponseCollection(ChannelImage::class, $content);
-//    }
-//
+    /**
+     * @depends testCreateCategory
+     * @param Category $category
+     */
+    public function testAddImageToCategory(Category $category)
+    {
+        $image = $this->client->contextFactory()->createCategoryImage();
+        $image->uri = 'http://localhost/phpunit.png';
+
+        /** @var CategoryImage $content */
+        $content = $this->client->getCategoryImageResource()
+            ->addImageToCategory($image, $category)
+            ->exec()
+            ->getSingleResult();
+
+        $this->assertApiResponseSingleResult(CategoryImage::class, $content);
+        $this->assertEquals($category->getLocation(), $content->category);
+
+        // Две одинаковых картинки добавить нельзя
+        $this->expectException(\RuntimeException::class);
+        $this->client->getCategoryImageResource()
+            ->addImageToCategory($image, $category)
+            ->exec();
+    }
+
+    /**
+     * @depends testCreateCategory
+     * @param Category $category
+     */
+    public function testGetImagesByCategory(Category $category)
+    {
+        $content = $this->client->getCategoryResource()
+            ->getImages($category->getLocation())
+            ->exec()
+            ->getArrayResult();
+
+        $this->assertApiResponseCollection(CategoryImage::class, $content);
+    }
+
     /**
      * @depends testCreateCategory
      * @param Category $category

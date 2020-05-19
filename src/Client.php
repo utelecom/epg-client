@@ -4,11 +4,13 @@ namespace EpgClient;
 
 use EpgClient\Context\Account;
 use EpgClient\Context\Category;
+use EpgClient\Context\CategoryImage;
 use EpgClient\Context\Channel;
 use EpgClient\Context\ChannelImage;
 use EpgClient\Context\Provider;
 use EpgClient\Resource\AbstractResource;
 use EpgClient\Resource\AccountResource;
+use EpgClient\Resource\CategoryImagesResource;
 use EpgClient\Resource\CategoryResource;
 use EpgClient\Resource\ChannelImagesResource;
 use EpgClient\Resource\ChannelResource;
@@ -24,6 +26,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method ChannelImagesResource getChannelImageResource()
  * @method ProviderResource getProviderResource()
  * @method CategoryResource getCategoryResource()
+ * @method CategoryImagesResource getCategoryImageResource()
  */
 class Client
 {
@@ -32,21 +35,24 @@ class Client
     const CHANNEL = 'channel';
     const CHANNEL_IMAGE = 'channelimage';
     const CATEGORY = 'category';
+    const CATEGORY_IMAGE = 'categoryimage';
 
     private static $apiResources = [
-        self::ACCOUNT       => AccountResource::class,
-        self::PROVIDER      => ProviderResource::class,
-        self::CHANNEL       => ChannelResource::class,
-        self::CHANNEL_IMAGE => ChannelImagesResource::class,
-        self::CATEGORY      => CategoryResource::class,
+        self::ACCOUNT        => AccountResource::class,
+        self::PROVIDER       => ProviderResource::class,
+        self::CHANNEL        => ChannelResource::class,
+        self::CHANNEL_IMAGE  => ChannelImagesResource::class,
+        self::CATEGORY       => CategoryResource::class,
+        self::CATEGORY_IMAGE => CategoryImagesResource::class,
     ];
 
     private static $apiContexts = [
-        self::ACCOUNT       => Account::class,
-        self::PROVIDER      => Provider::class,
-        self::CHANNEL       => Channel::class,
-        self::CHANNEL_IMAGE => ChannelImage::class,
-        self::CATEGORY      => Category::class,
+        self::ACCOUNT        => Account::class,
+        self::PROVIDER       => Provider::class,
+        self::CHANNEL        => Channel::class,
+        self::CHANNEL_IMAGE  => ChannelImage::class,
+        self::CATEGORY       => Category::class,
+        self::CATEGORY_IMAGE => CategoryImage::class,
     ];
 
     /** @var ConfigInterface */

@@ -4,6 +4,7 @@ namespace EpgClient;
 
 use EpgClient\Context\AbstractContext;
 use EpgClient\Context\Category;
+use EpgClient\Context\CategoryImage;
 use EpgClient\Context\Channel;
 use EpgClient\Context\ChannelImage;
 
@@ -14,6 +15,7 @@ use EpgClient\Context\ChannelImage;
  * @method Channel createChannel()
  * @method ChannelImage createChannelImage()
  * @method Category createCategory()
+ * @method CategoryImage createCategoryImage()
  */
 class ContextFactory
 {
