@@ -14,4 +14,13 @@ class ProviderResource extends AbstractResource
 
         return $this;
     }
+
+    public function getCategories($providerLocation)
+    {
+        $this->reset();
+        $this->location = $providerLocation . '/categories';
+        $this->method = 'GET';
+
+        return $this;
+    }
 }

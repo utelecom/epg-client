@@ -2,6 +2,7 @@
 
 namespace EpgClient\Tests\Integration;
 
+use EpgClient\Context\Category;
 use EpgClient\Context\Channel;
 use EpgClient\Context\Provider;
 use EpgClient\Tests\CustomApiTestCase;
@@ -54,6 +55,23 @@ class ProviderResourceTest extends CustomApiTestCase
             ->getSingleResult();
 
         $this->assertApiResponseSingleResult(Channel::class, $content);
+    }
+
+    /**
+     * @depends testGetProviders
+     * @param Provider $provider
+     * @return Channel
+     */
+    public function testGetCategories(Provider $provider)
+    {
+        $content = $this->client->getProviderResource()
+            ->getCategories($provider->getLocation())
+            ->exec()
+            ->getArrayResult();
+
+        $this->assertApiResponseCollection(Category::class, $content);
+
+        return reset($content);
     }
 
 }
