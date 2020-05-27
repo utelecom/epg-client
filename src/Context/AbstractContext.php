@@ -30,6 +30,11 @@ abstract class AbstractContext implements JsonSerializable
         $this->data[$name] = $value;
     }
 
+    public function __isset($name)
+    {
+        return isset($this->data[$name]);
+    }
+
     public function getLocation()
     {
         return $this->data['@id'];
