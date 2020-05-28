@@ -21,9 +21,7 @@ abstract class AbstractContext implements JsonSerializable
 
     public function __set($name, $value)
     {
-        if (is_integer($value)) {
-            $value = (string) $value;
-        } elseif ($value && $value instanceof self) {
+        if ($value && $value instanceof self) {
             $value = $value->getLocation();
         }
 
