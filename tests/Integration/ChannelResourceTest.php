@@ -28,6 +28,8 @@ class ChannelResourceTest extends CustomApiTestCase
     {
         $context = $this->client->contextFactory()->createChannel();
         $context->externalId = 'phpUnit';
+        $context->position = 1;
+        $context->adult = true;
         $context->setTitle('phpUnit', 'en');
 
         /** @var Channel $content */
@@ -39,6 +41,8 @@ class ChannelResourceTest extends CustomApiTestCase
         $this->assertApiResponseSingleResult(Channel::class, $content);
         $this->assertEquals('phpUnit', $content->externalId);
         $this->assertEquals('phpUnit', $content->__get('translations')['en']['title']);
+        $this->assertEquals('1', $content->position);
+        $this->assertEquals(true, $content->adult);
 
         return $content;
     }

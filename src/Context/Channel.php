@@ -11,9 +11,11 @@ namespace EpgClient\Context;
  * @property string         $externalId
  * @property-read string    $title
  * @property-read array     $translations
- * @property Channel        $providerChannel
+ * @property Channel|null   $providerChannel
  * @property ChannelImage[] $images
  * @property string         $logo
+ * @property integer        $position
+ * @property bool           $adult
  */
 class Channel extends AbstractContext
 {
