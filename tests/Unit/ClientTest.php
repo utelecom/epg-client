@@ -37,10 +37,10 @@ class ClientTest extends CustomTestCase
         $config = new DummyConfig();
         $payload = new JWTPayload('');
         $clientMock = $this->getMockBuilder(Client::class)
-            ->setMethods(['getPayload'])
+            ->setMethods(['getTokenPayload'])
             ->setConstructorArgs([$config])
             ->getMock();
-        $clientMock->method('getPayload')->willReturn($payload);
+        $clientMock->method('getTokenPayload')->willReturn($payload);
 
         $method = "get{$resourceName}Resource";
         $this->assertTrue(is_callable([$clientMock, $method]));
