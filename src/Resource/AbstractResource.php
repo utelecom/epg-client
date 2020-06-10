@@ -28,6 +28,7 @@ abstract class AbstractResource
     protected $groups = [];
     /** @var array */
     private $options;
+    private $acceptLanguage;
 
     public function __construct(Client $client)
     {
@@ -182,9 +183,10 @@ abstract class AbstractResource
         }
 
         $query = [];
-        !empty($this->options) and $query += $this->options;
-        !empty($this->filters) and $query += $this->filters;
-        !empty($this->groups) and $query['groups'] = array_keys($this->groups);
+        $this->options and $query += $this->options;
+        $this->filters and $query += $this->filters;
+        $this->groups and $query['groups'] = array_keys($this->groups);
+        $this->acceptLanguage and $query['locale'] = $this->acceptLanguage;
 
         $location = $this->location;
         if ($query) {
@@ -234,5 +236,10 @@ abstract class AbstractResource
         $this->options['pagination'] = false;
 
         return $this;
+    }
+
+    public function setLanguage($lang)
+    {
+        $this->acceptLanguage = $lang;
     }
 }

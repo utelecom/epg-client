@@ -33,6 +33,9 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Client
 {
+    const LANG_UK = 'uk';
+    const LANG_RU = 'ru';
+
     const ACCOUNT = 'account';
     const PROVIDER = 'provider';
     const CHANNEL = 'channel';
@@ -69,6 +72,8 @@ class Client
     private $resourceFactory;
     /** @var \GuzzleHttp\Client */
     private $httpClient;
+    /** @var string */
+    private $acceptLanguage;
 
     public function __construct(ConfigInterface $config)
     {
@@ -119,18 +124,30 @@ class Client
         return new $class($this);
     }
 
+    /**
+     * @param string $lang
+     */
+    public function setAcceptLanguage($lang)
+    {
+        $this->acceptLanguage = $lang;
+    }
+
     public function request($method, $uri, $body = [])
     {
+        // Build headers
         $headers['Authorization'] = 'Bearer ' . $this->getToken();
         if ($body and strtoupper($method) !== 'GET') {
             $headers['Content-Type'] = 'application/ld+json';
         }
+        $this->acceptLanguage and $headers['Accept-Language'] = $this->acceptLanguage;
 
+        // Make request
         $response = $this->getClient()->request($method, $uri, [
             'headers' => $headers,
             'json'    => $body,
         ]);
 
+        // Check response
         if ($response->getStatusCode() === 401) {
             $headers['Authorization'] = 'Bearer ' . $this->refreshToken();
             $response = $this->getClient()->request($method, $uri, [
