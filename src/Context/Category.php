@@ -10,8 +10,7 @@ namespace EpgClient\Context;
  * @property-read string    $title
  * @property-read array     $translations
  * @property Category[]     $providerCategories
-// * @property ChannelImage[] $images
-// * @property string         $logo
+ * @property string|null    $poster
  */
 class Category extends AbstractContext
 {
