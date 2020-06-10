@@ -9,6 +9,7 @@ class ChannelResource extends AbstractResource
 {
     const GROUP_TRANSLATIONS = 'translations';
     const GROUP_IMAGES = 'images';
+    const GROUP_PARENT = 'parent';
 
     protected static $baseLocation = '/api/channels';
 
