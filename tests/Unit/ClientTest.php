@@ -54,6 +54,8 @@ class ClientTest extends CustomTestCase
             ['Account'],
             ['Channel'],
             ['Provider'],
+            ['Category'],
+            ['Genre'],
         ];
     }
 }

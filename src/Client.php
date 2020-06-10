@@ -7,6 +7,7 @@ use EpgClient\Context\Category;
 use EpgClient\Context\CategoryImage;
 use EpgClient\Context\Channel;
 use EpgClient\Context\ChannelImage;
+use EpgClient\Context\Genre;
 use EpgClient\Context\Provider;
 use EpgClient\Resource\AbstractResource;
 use EpgClient\Resource\AccountResource;
@@ -14,6 +15,7 @@ use EpgClient\Resource\CategoryImagesResource;
 use EpgClient\Resource\CategoryResource;
 use EpgClient\Resource\ChannelImagesResource;
 use EpgClient\Resource\ChannelResource;
+use EpgClient\Resource\GenreResource;
 use EpgClient\Resource\ProviderResource;
 use Psr\Http\Message\ResponseInterface;
 
@@ -27,6 +29,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method ProviderResource getProviderResource()
  * @method CategoryResource getCategoryResource()
  * @method CategoryImagesResource getCategoryImageResource()
+ * @method GenreResource getGenreResource()
  */
 class Client
 {
@@ -36,6 +39,7 @@ class Client
     const CHANNEL_IMAGE = 'channelimage';
     const CATEGORY = 'category';
     const CATEGORY_IMAGE = 'categoryimage';
+    const GENRE = 'genre';
 
     private static $apiResources = [
         self::ACCOUNT        => AccountResource::class,
@@ -44,6 +48,7 @@ class Client
         self::CHANNEL_IMAGE  => ChannelImagesResource::class,
         self::CATEGORY       => CategoryResource::class,
         self::CATEGORY_IMAGE => CategoryImagesResource::class,
+        self::GENRE          => GenreResource::class,
     ];
 
     private static $apiContexts = [
@@ -53,6 +58,7 @@ class Client
         self::CHANNEL_IMAGE  => ChannelImage::class,
         self::CATEGORY       => Category::class,
         self::CATEGORY_IMAGE => CategoryImage::class,
+        self::GENRE          => Genre::class,
     ];
 
     /** @var ConfigInterface */
@@ -87,7 +93,7 @@ class Client
 
         return $this->resourceFactory;
     }
-    
+
     public function __call($name, $arguments)
     {
         if (preg_match('#^get(.+?)Resource$#', $name, $matches)) {

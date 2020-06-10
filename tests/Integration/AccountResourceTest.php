@@ -6,6 +6,7 @@ use EpgClient\ConfigInterface;
 use EpgClient\Context\Account;
 use EpgClient\Context\Category;
 use EpgClient\Context\Channel;
+use EpgClient\Context\Genre;
 use EpgClient\Tests\CustomApiTestCase;
 
 /**
@@ -132,6 +133,38 @@ class AccountResourceTest extends CustomApiTestCase
             ->getSingleResult();
 
         $this->assertApiResponseSingleResult(Category::class, $content);
+    }
+
+    /**
+     * @depends      testGetAccountByName
+     * @param Account $account
+     * @return Channel
+     */
+    public function testGetGenres(Account $account)
+    {
+        $content = $this->client->getAccountResource()
+            ->getGenres($account->getLocation())
+            ->exec()
+            ->getArrayResult();
+
+        $this->assertApiResponseCollection(Genre::class, $content);
+
+        return reset($content);
+    }
+
+    /**
+     * @depends      testGetGenres
+     * @param Genre $genre
+     */
+    public function testGetGenreByExternalId(Genre $genre)
+    {
+        $content = $this->client->getAccountResource()
+            ->getGenres($genre->account)
+            ->addFilter('externalId', $genre->externalId)
+            ->exec()
+            ->getSingleResult();
+
+        $this->assertApiResponseSingleResult(Genre::class, $content);
     }
 
     protected function setUp()

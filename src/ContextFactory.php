@@ -7,6 +7,7 @@ use EpgClient\Context\Category;
 use EpgClient\Context\CategoryImage;
 use EpgClient\Context\Channel;
 use EpgClient\Context\ChannelImage;
+use EpgClient\Context\Genre;
 
 /**
  * Class ContextFactory
@@ -16,6 +17,7 @@ use EpgClient\Context\ChannelImage;
  * @method ChannelImage createChannelImage()
  * @method Category createCategory()
  * @method CategoryImage createCategoryImage()
+ * @method Genre createGenre()
  */
 class ContextFactory
 {
@@ -99,7 +101,6 @@ class ContextFactory
             return $item;
         }
 
-        /** @var AbstractContext $context */
         $context = $this->createEmptyContext($type);
         foreach ($item as $property => $value) {
             if (is_array($value) && is_numeric(key($value))) {

@@ -4,7 +4,9 @@ namespace EpgClient\Tests\Integration;
 
 use EpgClient\Client;
 use EpgClient\Context\Account;
+use EpgClient\Context\Category;
 use EpgClient\Context\Channel;
+use EpgClient\Context\Genre;
 use EpgClient\Context\Provider;
 use EpgClient\Tests\CustomApiTestCase;
 
@@ -39,6 +41,8 @@ class ResourceTest extends CustomApiTestCase
             [Provider::class, Client::PROVIDER],
             [Account::class, Client::ACCOUNT],
             [Channel::class, Client::CHANNEL],
+            [Category::class, Client::CATEGORY],
+            [Genre::class, Client::GENRE],
         ];
     }
 }

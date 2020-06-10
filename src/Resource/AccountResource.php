@@ -44,6 +44,20 @@ class AccountResource extends AbstractResource
         return $this;
     }
 
+    /**
+     * @param null|string $accountLocation required only if your user have not any relation to account
+     * @return $this
+     */
+    public function getGenres($accountLocation = null)
+    {
+        $this->reset();
+        $accountLocation = $accountLocation ?: $this->getAccountLocation();
+        $this->location = $accountLocation . '/genres';
+        $this->method = 'GET';
+
+        return $this;
+    }
+
     private function getAccountLocation()
     {
         if (!$this->accountLocation) {
