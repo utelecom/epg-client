@@ -59,6 +59,8 @@ class Client
     private $config;
     /** @var ContextFactory */
     private $contextFactory;
+    /** @var ResourceFactory */
+    private $resourceFactory;
     /** @var \GuzzleHttp\Client */
     private $httpClient;
 
@@ -76,17 +78,27 @@ class Client
         return $this->contextFactory;
     }
 
+    private function resourceFactory()
+    {
+        if (!$this->resourceFactory) {
+            $payload = $this->getTokenPayload();
+            $this->resourceFactory = new ResourceFactory(static::$apiResources, $this, $payload);
+        }
+
+        return $this->resourceFactory;
+    }
+    
     public function __call($name, $arguments)
     {
         if (preg_match('#^get(.+?)Resource$#', $name, $matches)) {
-            $type = $matches[1];
-            return $this->getResource($type);
+            return $this->resourceFactory()->build($matches[1]);
         }
 
         throw new \BadMethodCallException;
     }
 
     /**
+     * @deprecated look at self::resourceFactory()
      * @param string $resourceName
      * @return AbstractResource
      */
@@ -158,6 +170,15 @@ class Client
         $this->config->set(ConfigInterface::API_TOKEN_REFRESH, $data['refresh_token']);
 
         return $this->config->get(ConfigInterface::API_TOKEN);
+    }
+
+    /**
+     * @return JWTPayload
+     */
+    protected function getTokenPayload()
+    {
+        $jwt = $this->getToken();
+        return new JWTPayload($jwt);
     }
 
     /**

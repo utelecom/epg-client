@@ -7,10 +7,11 @@ interface ConfigInterface
     const API_URL = 'API_URL';
     const API_ADMIN = 'API_ADMIN';
     const API_PASSWORD = 'API_PASSWORD';
-    const ACCOUNT_NAME = 'ACCOUNT_NAME';
-    const ACCOUNT_LOCATION = 'ACCOUNT_LOCATION';
+    const ACCOUNT_LOCATION = '_account_location';
     const API_TOKEN = '_api_token';
     const API_TOKEN_REFRESH = '_api_token_refresh';
+    /** @deprecated */
+    const ACCOUNT_NAME = 'ACCOUNT_NAME';
 
     /**
      * @param string $name

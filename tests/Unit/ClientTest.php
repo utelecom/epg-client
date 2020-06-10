@@ -3,6 +3,7 @@
 namespace EpgClient\Tests\Unit;
 
 use EpgClient\Client;
+use EpgClient\JWTPayload;
 use EpgClient\Resource\AbstractResource;
 use EpgClient\Tests\CustomTestCase;
 use EpgClient\Tests\Fixtures\DummyConfig;
@@ -28,17 +29,23 @@ class ClientTest extends CustomTestCase
     }
 
     /**
-     * @depends      testInstantiate
      * @dataProvider getResourceProvider
      * @param string $resourceName
-     * @param Client $client
      */
-    public function testGetResource($resourceName, $client)
+    public function testGetResource($resourceName)
     {
-        $method = "get{$resourceName}Resource";
-        $this->assertTrue(is_callable([$client, $method]));
+        $config = new DummyConfig();
+        $payload = new JWTPayload('');
+        $clientMock = $this->getMockBuilder(Client::class)
+            ->setMethods(['getPayload'])
+            ->setConstructorArgs([$config])
+            ->getMock();
+        $clientMock->method('getPayload')->willReturn($payload);
 
-        $this->assertInstanceOf(AbstractResource::class, call_user_func([$client, $method], $resourceName));
+        $method = "get{$resourceName}Resource";
+        $this->assertTrue(is_callable([$clientMock, $method]));
+
+        $this->assertInstanceOf(AbstractResource::class, call_user_func([$clientMock, $method], $resourceName));
     }
 
     public function getResourceProvider()

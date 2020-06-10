@@ -4,6 +4,7 @@ namespace EpgClient\Resource;
 
 use EpgClient\Client;
 use EpgClient\Context\AbstractContext;
+use EpgClient\JWTPayload;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractResource
@@ -31,6 +32,11 @@ abstract class AbstractResource
     public function __construct(Client $client)
     {
         $this->client = $client;
+    }
+
+    public function init(JWTPayload $payload)
+    {
+        // Nothing here
     }
 
     public function get($location = null)
@@ -189,10 +195,11 @@ abstract class AbstractResource
         $this->response = $this->client->request($this->method, $location, $body);
         if (!$this->isResponseValid()) {
             $body = $this->client->responseToArray($this->response);
-            throw new \RuntimeException(sprintf("Error %s: %s.\nResource %s.\nBody: %s",
+            throw new \RuntimeException(sprintf("Error %s: %s.\nResource %s.\nLocation:%s\nBody: %s",
                 $this->response->getStatusCode(),
                 $this->response->getReasonPhrase(),
                 get_class($this),
+                $location,
                 var_export($body, true)
             ));
         }
