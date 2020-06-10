@@ -7,6 +7,9 @@ use EpgClient\Context\Channel;
 
 class ChannelResource extends AbstractResource
 {
+    const GROUP_TRANSLATIONS = 'translations';
+    const GROUP_IMAGES = 'images';
+
     protected static $baseLocation = '/api/channels';
 
     public function getImages($channelLocation)

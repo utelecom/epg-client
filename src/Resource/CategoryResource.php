@@ -7,6 +7,9 @@ use EpgClient\Context\Category;
 
 class CategoryResource extends AbstractResource
 {
+    const GROUP_TRANSLATIONS = 'translations';
+    const GROUP_IMAGES = 'images';
+
     protected static $baseLocation = '/api/categories';
 
     public function getImages($channelLocation)
