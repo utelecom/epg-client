@@ -2,6 +2,8 @@
 
 namespace EpgClient;
 
+use EpgClient\Token\JWTPayload;
+
 class ResourceFactory
 {
     /** @var array */

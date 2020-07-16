@@ -3,10 +3,10 @@
 namespace EpgClient\Tests\Unit;
 
 use EpgClient\Client;
-use EpgClient\JWTPayload;
 use EpgClient\Resource\AbstractResource;
 use EpgClient\Tests\CustomTestCase;
 use EpgClient\Tests\Fixtures\DummyConfig;
+use EpgClient\Token\JWTPayload;
 
 /**
  * Class ClientTest

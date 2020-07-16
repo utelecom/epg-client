@@ -1,6 +1,6 @@
 <?php
 
-namespace EpgClient;
+namespace EpgClient\Token;
 
 use Firebase\JWT\JWT;
 
@@ -14,16 +14,22 @@ class JWTPayload
     /**
      * TokenPayload constructor.
      * @param string $jwt
+     * @throws InvalidJWTPayload
      */
     public function __construct($jwt)
     {
         if (!$jwt) {
             return;
         }
+
         list(,$bodyB64,) = explode('.', $jwt);
-        $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyB64));
-        $this->username = $payload->username;
-        $this->account = $payload->account;
+        $payload = (array)JWT::jsonDecode(JWT::urlsafeB64Decode($bodyB64));
+        if (!array_key_exists('account', $payload)) {
+            throw new InvalidJWTPayload("Missed required parameter in payload");
+        }
+
+        $this->username = $payload['username'];
+        $this->account = $payload['account'];
     }
 
     /**

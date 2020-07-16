@@ -17,6 +17,8 @@ use EpgClient\Resource\ChannelImagesResource;
 use EpgClient\Resource\ChannelResource;
 use EpgClient\Resource\GenreResource;
 use EpgClient\Resource\ProviderResource;
+use EpgClient\Token\InvalidJWTPayload;
+use EpgClient\Token\JWTPayload;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -44,7 +46,7 @@ class Client
     const CATEGORY_IMAGE = 'categoryimage';
     const GENRE = 'genre';
 
-    private static $apiResources = [
+    protected static $apiResources = [
         self::ACCOUNT        => AccountResource::class,
         self::PROVIDER       => ProviderResource::class,
         self::CHANNEL        => ChannelResource::class,
@@ -54,7 +56,7 @@ class Client
         self::GENRE          => GenreResource::class,
     ];
 
-    private static $apiContexts = [
+    protected static $apiContexts = [
         self::ACCOUNT        => Account::class,
         self::PROVIDER       => Provider::class,
         self::CHANNEL        => Channel::class,
@@ -197,11 +199,17 @@ class Client
 
     /**
      * @return JWTPayload
+     * @throws InvalidJWTPayload
      */
     protected function getTokenPayload()
     {
-        $jwt = $this->getToken();
-        return new JWTPayload($jwt);
+        try {
+            $jwt = $this->getToken();
+            return new JWTPayload($jwt);
+        } catch (InvalidJWTPayload $e) {
+            $jwt = $this->refreshToken();
+            return new JWTPayload($jwt);
+        }
     }
 
     /**

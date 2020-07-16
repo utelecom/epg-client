@@ -2,7 +2,7 @@
 
 namespace EpgClient\Resource;
 
-use EpgClient\JWTPayload;
+use EpgClient\Token\JWTPayload;
 
 class AccountResource extends AbstractResource
 {

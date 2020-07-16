@@ -4,7 +4,7 @@ namespace EpgClient\Resource;
 
 use EpgClient\Client;
 use EpgClient\Context\AbstractContext;
-use EpgClient\JWTPayload;
+use EpgClient\Token\JWTPayload;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractResource
@@ -28,6 +28,7 @@ abstract class AbstractResource
     protected $groups = [];
     /** @var array */
     private $options;
+    /** @var string */
     private $acceptLanguage;
 
     public function __construct(Client $client)
