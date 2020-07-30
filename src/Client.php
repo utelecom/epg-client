@@ -26,6 +26,9 @@ use Psr\Http\Message\ResponseInterface;
  */
 class Client
 {
+    const AUTH_TYPE_JWT = 'jwt';
+    const AUTH_TYPE_API_KEY = 'api_key';
+
     const LANG_UK = 'uk';
     const LANG_RU = 'ru';
 
@@ -79,6 +82,8 @@ class Client
     private $httpClient;
     /** @var string */
     private $acceptLanguage;
+    /** @var string */
+    private $authType = self::AUTH_TYPE_JWT;
 
     public function __construct(ConfigInterface $config)
     {
@@ -242,12 +247,20 @@ class Client
 
     public function request($method, $uri, $body = [])
     {
-        // Build headers
-        $headers['Authorization'] = 'Bearer ' . $this->getToken();
+        // Auth header
+        if ($this->authType === self::AUTH_TYPE_API_KEY) {
+            $headers['X-AUTH-TOKEN'] = $this->config->get(ConfigInterface::API_KEY);
+        } else {
+            $headers['Authorization'] = 'Bearer ' . $this->getToken();
+        }
+        // Content-Type header
         if ($body and strtoupper($method) !== 'GET') {
             $headers['Content-Type'] = 'application/ld+json';
         }
-        $this->acceptLanguage and $headers['Accept-Language'] = $this->acceptLanguage;
+        // Accept language header
+        if ($this->acceptLanguage) {
+            $headers['Accept-Language'] = $this->acceptLanguage;
+        }
 
         // Make request
         $response = $this->getClient()->request($method, $uri, [

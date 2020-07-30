@@ -7,6 +7,7 @@ interface ConfigInterface
     const API_URL = 'API_URL';
     const API_ADMIN = 'API_ADMIN';
     const API_PASSWORD = 'API_PASSWORD';
+    const API_KEY = 'API_KEY';
     const ACCOUNT_LOCATION = '_account_location';
     const API_TOKEN = '_api_token';
     const API_TOKEN_REFRESH = '_api_token_refresh';
