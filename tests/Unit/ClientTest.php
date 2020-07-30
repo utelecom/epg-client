@@ -51,6 +51,9 @@ class ClientTest extends CustomTestCase
     public function getResourceProvider()
     {
         return [
+            ['AccountChannel'],
+            ['AccountCategory'],
+            ['AccountGenre'],
             ['Account'],
             ['Channel'],
             ['Provider'],

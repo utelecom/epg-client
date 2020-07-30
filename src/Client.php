@@ -2,41 +2,35 @@
 
 namespace EpgClient;
 
-use EpgClient\Context\Account;
-use EpgClient\Context\Category;
-use EpgClient\Context\CategoryImage;
-use EpgClient\Context\Channel;
-use EpgClient\Context\ChannelImage;
-use EpgClient\Context\Genre;
-use EpgClient\Context\Provider;
 use EpgClient\Resource\AbstractResource;
-use EpgClient\Resource\AccountResource;
-use EpgClient\Resource\CategoryImagesResource;
-use EpgClient\Resource\CategoryResource;
-use EpgClient\Resource\ChannelImagesResource;
-use EpgClient\Resource\ChannelResource;
-use EpgClient\Resource\GenreResource;
-use EpgClient\Resource\ProviderResource;
 use EpgClient\Token\InvalidJWTPayload;
 use EpgClient\Token\JWTPayload;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Client
+ *
  * @package EpgClient
  *
- * @method AccountResource getAccountResource()
- * @method ChannelResource getChannelResource()
- * @method ChannelImagesResource getChannelImageResource()
- * @method ProviderResource getProviderResource()
- * @method CategoryResource getCategoryResource()
- * @method CategoryImagesResource getCategoryImageResource()
- * @method GenreResource getGenreResource()
+ * @method \EpgClient\Resource\AccountChannelResource getAccountChannelResource()
+ * @method \EpgClient\Resource\AccountCategoryResource getAccountCategoryResource()
+ * @method \EpgClient\Resource\AccountGenreResource getAccountGenreResource()
+ * @method \EpgClient\Resource\AccountResource getAccountResource()
+ * @method \EpgClient\Resource\ChannelResource getChannelResource()
+ * @method \EpgClient\Resource\ChannelImagesResource getChannelImageResource()
+ * @method \EpgClient\Resource\ProviderResource getProviderResource()
+ * @method \EpgClient\Resource\CategoryResource getCategoryResource()
+ * @method \EpgClient\Resource\CategoryImagesResource getCategoryImageResource()
+ * @method \EpgClient\Resource\GenreResource getGenreResource()
  */
 class Client
 {
     const LANG_UK = 'uk';
     const LANG_RU = 'ru';
+
+    const ACCOUNT_CHANNEL = 'accountchannel';
+    const ACCOUNT_CATEGORY = 'accountcategory';
+    const ACCOUNT_GENRE = 'accountgenre';
 
     const ACCOUNT = 'account';
     const PROVIDER = 'provider';
@@ -47,23 +41,29 @@ class Client
     const GENRE = 'genre';
 
     protected static $apiResources = [
-        self::ACCOUNT        => AccountResource::class,
-        self::PROVIDER       => ProviderResource::class,
-        self::CHANNEL        => ChannelResource::class,
-        self::CHANNEL_IMAGE  => ChannelImagesResource::class,
-        self::CATEGORY       => CategoryResource::class,
-        self::CATEGORY_IMAGE => CategoryImagesResource::class,
-        self::GENRE          => GenreResource::class,
+        self::ACCOUNT_CHANNEL  => \EpgClient\Resource\AccountChannelResource::class,
+        self::ACCOUNT_CATEGORY => \EpgClient\Resource\AccountCategoryResource::class,
+        self::ACCOUNT_GENRE    => \EpgClient\Resource\AccountGenreResource::class,
+        self::ACCOUNT          => \EpgClient\Resource\AccountResource::class,
+        self::PROVIDER         => \EpgClient\Resource\ProviderResource::class,
+        self::CHANNEL          => \EpgClient\Resource\ChannelResource::class,
+        self::CHANNEL_IMAGE    => \EpgClient\Resource\ChannelImagesResource::class,
+        self::CATEGORY         => \EpgClient\Resource\CategoryResource::class,
+        self::CATEGORY_IMAGE   => \EpgClient\Resource\CategoryImagesResource::class,
+        self::GENRE            => \EpgClient\Resource\GenreResource::class,
     ];
 
     protected static $apiContexts = [
-        self::ACCOUNT        => Account::class,
-        self::PROVIDER       => Provider::class,
-        self::CHANNEL        => Channel::class,
-        self::CHANNEL_IMAGE  => ChannelImage::class,
-        self::CATEGORY       => Category::class,
-        self::CATEGORY_IMAGE => CategoryImage::class,
-        self::GENRE          => Genre::class,
+        self::ACCOUNT_CHANNEL  => \EpgClient\Context\AccountChannel::class,
+        self::ACCOUNT_CATEGORY => \EpgClient\Context\AccountCategory::class,
+        self::ACCOUNT_GENRE    => \EpgClient\Context\AccountGenre::class,
+        self::ACCOUNT          => \EpgClient\Context\Account::class,
+        self::PROVIDER         => \EpgClient\Context\Provider::class,
+        self::CHANNEL          => \EpgClient\Context\Channel::class,
+        self::CHANNEL_IMAGE    => \EpgClient\Context\ChannelImage::class,
+        self::CATEGORY         => \EpgClient\Context\Category::class,
+        self::CATEGORY_IMAGE   => \EpgClient\Context\CategoryImage::class,
+        self::GENRE            => \EpgClient\Context\Genre::class,
     ];
 
     /** @var ConfigInterface */
@@ -91,6 +91,15 @@ class Client
         return $this->contextFactory;
     }
 
+    public function __call($name, $arguments)
+    {
+        if (preg_match('#^get(.+?)Resource$#', $name, $matches)) {
+            return $this->resourceFactory()->build($matches[1]);
+        }
+
+        throw new \BadMethodCallException;
+    }
+
     private function resourceFactory()
     {
         if (!$this->resourceFactory) {
@@ -101,64 +110,19 @@ class Client
         return $this->resourceFactory;
     }
 
-    public function __call($name, $arguments)
-    {
-        if (preg_match('#^get(.+?)Resource$#', $name, $matches)) {
-            return $this->resourceFactory()->build($matches[1]);
-        }
-
-        throw new \BadMethodCallException;
-    }
-
     /**
-     * @deprecated look at self::resourceFactory()
-     * @param string $resourceName
-     * @return AbstractResource
+     * @return JWTPayload
+     * @throws InvalidJWTPayload
      */
-    public function getResource($resourceName)
+    protected function getTokenPayload()
     {
-        $resourceName = strtolower($resourceName);
-        if (!array_key_exists($resourceName, static::$apiResources)) {
-            throw new \RuntimeException("Unknown resource {$resourceName}");
+        try {
+            $jwt = $this->getToken();
+            return new JWTPayload($jwt);
+        } catch (InvalidJWTPayload $e) {
+            $jwt = $this->refreshToken();
+            return new JWTPayload($jwt);
         }
-        $class = static::$apiResources[$resourceName];
-
-        return new $class($this);
-    }
-
-    /**
-     * @param string $lang
-     */
-    public function setAcceptLanguage($lang)
-    {
-        $this->acceptLanguage = $lang;
-    }
-
-    public function request($method, $uri, $body = [])
-    {
-        // Build headers
-        $headers['Authorization'] = 'Bearer ' . $this->getToken();
-        if ($body and strtoupper($method) !== 'GET') {
-            $headers['Content-Type'] = 'application/ld+json';
-        }
-        $this->acceptLanguage and $headers['Accept-Language'] = $this->acceptLanguage;
-
-        // Make request
-        $response = $this->getClient()->request($method, $uri, [
-            'headers' => $headers,
-            'json'    => $body,
-        ]);
-
-        // Check response
-        if ($response->getStatusCode() === 401) {
-            $headers['Authorization'] = 'Bearer ' . $this->refreshToken();
-            $response = $this->getClient()->request($method, $uri, [
-                'headers' => $headers,
-                'json'    => $body,
-            ]);
-        }
-
-        return $response;
     }
 
     /**
@@ -195,21 +159,6 @@ class Client
         $this->config->set(ConfigInterface::API_TOKEN_REFRESH, $data['refresh_token']);
 
         return $this->config->get(ConfigInterface::API_TOKEN);
-    }
-
-    /**
-     * @return JWTPayload
-     * @throws InvalidJWTPayload
-     */
-    protected function getTokenPayload()
-    {
-        try {
-            $jwt = $this->getToken();
-            return new JWTPayload($jwt);
-        } catch (InvalidJWTPayload $e) {
-            $jwt = $this->refreshToken();
-            return new JWTPayload($jwt);
-        }
     }
 
     /**
@@ -260,6 +209,57 @@ class Client
         $this->config->set(ConfigInterface::API_TOKEN_REFRESH, $data['refresh_token']);
 
         return $this->config->get(ConfigInterface::API_TOKEN);
+    }
+
+    /**
+     * @param string $resourceName
+     * @return AbstractResource
+     * @deprecated look at self::resourceFactory()
+     */
+    public function getResource($resourceName)
+    {
+        $resourceName = strtolower($resourceName);
+        if (!array_key_exists($resourceName, static::$apiResources)) {
+            throw new \RuntimeException("Unknown resource {$resourceName}");
+        }
+        $class = static::$apiResources[$resourceName];
+
+        return new $class($this);
+    }
+
+    /**
+     * @param string $lang
+     */
+    public function setAcceptLanguage($lang)
+    {
+        $this->acceptLanguage = $lang;
+    }
+
+    public function request($method, $uri, $body = [])
+    {
+        // Build headers
+        $headers['Authorization'] = 'Bearer ' . $this->getToken();
+        if ($body and strtoupper($method) !== 'GET') {
+            $headers['Content-Type'] = 'application/ld+json';
+        }
+        $this->acceptLanguage and $headers['Accept-Language'] = $this->acceptLanguage;
+
+        // Make request
+        $response = $this->getClient()->request($method, $uri, [
+            'headers' => $headers,
+            'json'    => $body,
+        ]);
+
+        // Check response
+        if ($response->getStatusCode() === 401) {
+            $headers['Authorization'] = 'Bearer ' . $this->refreshToken();
+            $response = $this->getClient()->request($method, $uri, [
+                'headers' => $headers,
+                'json'    => $body,
+            ]);
+        }
+
+        return $response;
     }
 
 }
