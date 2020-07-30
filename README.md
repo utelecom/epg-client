@@ -3,7 +3,7 @@
 ## Installation
 
 ```
-$ composer require utg/epg-client ^0.1
+$ composer require utg/epg-client ^1.0
 ```
 
 Then you need to implement `\EpgClient\ConfigInterface` on you project. 
