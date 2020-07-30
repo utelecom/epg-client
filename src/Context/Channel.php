@@ -27,4 +27,13 @@ class Channel extends AbstractContext
 
         $this->translations = $translations;
     }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        $parts = array_reverse(explode('/', $this->getLocation()));
+        return reset($parts);
+    }
 }

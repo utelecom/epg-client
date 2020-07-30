@@ -20,19 +20,20 @@ $config->set($config::API_URL, 'https://<api_url>');
 $config->set($config::API_KEY, '<your_api_key>');
 
 $client = new EpgClient\Client($config);
+$client->setAcceptLanguage(EpgClient\Client::LANG_UK); #optional
 ```
 
 Channels:
 
 ```
 /** @var EpgClient\Context\AccountChannel[] $channels */
-$channels = $client->getAccountChannelsResource()
+$channels = $client->getAccountChannelResource()
     ->get()
     ->exec()
     ->getArrayResult();
 
 /** @var EpgClient\Context\AccountChannel $channel */
-$channel = $client->getAccountChannelsResource()
+$channel = $client->getAccountChannelResource()
     ->get($channelId)
     ->exec()
     ->getSingleResult();
@@ -42,13 +43,13 @@ Categories:
 
 ```
 /** @var EpgClient\Context\AccountCategory[] $categories */
-$categories = $client->getAccountCategoriesResource()
+$categories = $client->getAccountCategoryResource()
     ->get()
     ->exec()
     ->getArrayResult();
 
 /** @var EpgClient\Context\AccountCategory $categorie */
-$category = $client->getAccountCategoriesResource()
+$category = $client->getAccountCategoryResource()
     ->get($categoryId)
     ->exec()
     ->getSingleResult();
@@ -58,16 +59,53 @@ Genres:
 
 ```
 /** @var EpgClient\Context\AccountGenre[] $genres */
-$genres = $client->getAccountGenresResource()
+$genres = $client->getAccountGenreResource()
     ->get()
     ->exec()
     ->getArrayResult();
 
 /** @var EpgClient\Context\AccountGenre $genre */
-$genre = $client->getAccountGenresResource()
+$genre = $client->getAccountGenreResource()
     ->get($genreId)
     ->exec()
     ->getSingleResult();
+```
+
+Programs:
+
+```
+/**
+ * You can get program collection by instance of Channel
+ *
+ * @var EpgClient\Context\Channel $channel 
+ * @var EpgClient\Context\AccountProgram[] $programs 
+ */
+$programs = $client->getAccountProgramResource()
+    ->getByChannel($channel)
+    ->setPeriod(AccountProgramResource::PERIOD_NOW)
+    ->exec()
+    ->getArrayResult();
+
+/**
+ * Or you cat get program collection by channel id
+ *
+ * @var string $channelId 
+ * @var EpgClient\Context\AccountProgram[] $programs 
+ */
+$programs = $client->getAccountProgramResource()
+    ->getByChannelId($channelId)
+    ->setPeriod(AccountProgramResource::PERIOD_TODAY)
+    ->exec()
+    ->getArrayResult();
+
+/**
+ * @var string $programId 
+ * @var EpgClient\Context\AccountProgram $program 
+ */
+$program = $client->getAccountProgramResource()
+   ->get($programId)
+   ->exec()
+   ->getSingleResult();
 ```
 
 ## Manage entities 

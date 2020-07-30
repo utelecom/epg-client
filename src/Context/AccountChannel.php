@@ -7,13 +7,14 @@ namespace EpgClient\Context;
  *
  * @package EpgClient\AccountContext
  *
- * @property int    $position
- * @property bool   $adult
- * @property string $logo
- * @property string $title
- * @property string $genre
- * @property bool   $hasEpg
- * @property string $siteUrl
+ * @property-read string $id
+ * @property-read int    $position
+ * @property-read bool   $adult
+ * @property-read string $logo
+ * @property-read string $title
+ * @property-read string $genre
+ * @property-read bool   $hasEpg
+ * @property-read string $siteUrl
  */
 class AccountChannel extends AbstractContext
 {

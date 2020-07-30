@@ -15,6 +15,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method \EpgClient\Resource\AccountChannelResource getAccountChannelResource()
  * @method \EpgClient\Resource\AccountCategoryResource getAccountCategoryResource()
  * @method \EpgClient\Resource\AccountGenreResource getAccountGenreResource()
+ * @method \EpgClient\Resource\AccountProgramResource getAccountProgramResource()
  * @method \EpgClient\Resource\AccountResource getAccountResource()
  * @method \EpgClient\Resource\ChannelResource getChannelResource()
  * @method \EpgClient\Resource\ChannelImagesResource getChannelImageResource()
@@ -31,7 +32,7 @@ class Client
     const ACCOUNT_CHANNEL = 'accountchannel';
     const ACCOUNT_CATEGORY = 'accountcategory';
     const ACCOUNT_GENRE = 'accountgenre';
-
+    const ACCOUNT_PROGRAM = 'accountprogram';
     const ACCOUNT = 'account';
     const PROVIDER = 'provider';
     const CHANNEL = 'channel';
@@ -44,6 +45,7 @@ class Client
         self::ACCOUNT_CHANNEL  => \EpgClient\Resource\AccountChannelResource::class,
         self::ACCOUNT_CATEGORY => \EpgClient\Resource\AccountCategoryResource::class,
         self::ACCOUNT_GENRE    => \EpgClient\Resource\AccountGenreResource::class,
+        self::ACCOUNT_PROGRAM  => \EpgClient\Resource\AccountProgramResource::class,
         self::ACCOUNT          => \EpgClient\Resource\AccountResource::class,
         self::PROVIDER         => \EpgClient\Resource\ProviderResource::class,
         self::CHANNEL          => \EpgClient\Resource\ChannelResource::class,
@@ -57,6 +59,7 @@ class Client
         self::ACCOUNT_CHANNEL  => \EpgClient\Context\AccountChannel::class,
         self::ACCOUNT_CATEGORY => \EpgClient\Context\AccountCategory::class,
         self::ACCOUNT_GENRE    => \EpgClient\Context\AccountGenre::class,
+        self::ACCOUNT_PROGRAM  => \EpgClient\Context\AccountProgram::class,
         self::ACCOUNT          => \EpgClient\Context\Account::class,
         self::PROVIDER         => \EpgClient\Context\Provider::class,
         self::CHANNEL          => \EpgClient\Context\Channel::class,
@@ -179,6 +182,7 @@ class Client
 
     /**
      * @param ResponseInterface $response
+     *
      * @return array
      */
     public function responseToArray(ResponseInterface $response)
@@ -213,6 +217,7 @@ class Client
 
     /**
      * @param string $resourceName
+     *
      * @return AbstractResource
      * @deprecated look at self::resourceFactory()
      */

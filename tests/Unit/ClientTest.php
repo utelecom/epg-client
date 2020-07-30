@@ -54,6 +54,7 @@ class ClientTest extends CustomTestCase
             ['AccountChannel'],
             ['AccountCategory'],
             ['AccountGenre'],
+            ['AccountProgram'],
             ['Account'],
             ['Channel'],
             ['Provider'],
