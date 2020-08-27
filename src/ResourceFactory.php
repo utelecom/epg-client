@@ -2,22 +2,17 @@
 
 namespace EpgClient;
 
-use EpgClient\Token\JWTPayload;
-
 class ResourceFactory
 {
     /** @var array */
     private $knownResources;
     /** @var Client */
     private $client;
-    /** @var JWTPayload */
-    private $payload;
 
-    public function __construct(array $knownResources, Client $client, JWTPayload $payload)
+    public function __construct(array $knownResources, Client $client)
     {
         $this->knownResources = $knownResources;
         $this->client = $client;
-        $this->payload = $payload;
     }
 
     public function build($resourceName)
@@ -27,8 +22,7 @@ class ResourceFactory
             throw new \RuntimeException("Unknown resource {$resourceName}");
         }
         $class = $this->knownResources[$resourceName];
-        $instance = new $class($this->client);
-        $instance->init($this->payload);
-        return $instance;
+
+        return new $class($this->client);
     }
 }

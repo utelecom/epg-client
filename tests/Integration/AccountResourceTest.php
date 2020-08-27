@@ -2,7 +2,6 @@
 
 namespace EpgClient\Tests\Integration;
 
-use EpgClient\ConfigInterface;
 use EpgClient\Context\Account;
 use EpgClient\Context\Category;
 use EpgClient\Context\Channel;
@@ -15,12 +14,14 @@ use EpgClient\Tests\CustomApiTestCase;
  */
 class AccountResourceTest extends CustomApiTestCase
 {
+    /** @var string */
+    private $accountName;
+
     public function testGetAccountByName()
     {
-        $accountName = $this->config->get(ConfigInterface::ACCOUNT_NAME);
         $content = $this->client->getAccountResource()
             ->get()
-            ->addFilter('name', $accountName)
+            ->addFilter('name', $this->accountName)
             ->exec()
             ->getSingleResult();
 
@@ -57,6 +58,7 @@ class AccountResourceTest extends CustomApiTestCase
      */
     public function testGetChannels(Account $account)
     {
+        /** @var Channel[] $content */
         $content = $this->client->getAccountResource()
             ->getChannels($account->getLocation())
             ->exec()
@@ -110,6 +112,7 @@ class AccountResourceTest extends CustomApiTestCase
      */
     public function testGetCategories(Account $account)
     {
+        /** @var Channel[] $content */
         $content = $this->client->getAccountResource()
             ->getCategories($account->getLocation())
             ->exec()
@@ -142,6 +145,7 @@ class AccountResourceTest extends CustomApiTestCase
      */
     public function testGetGenres(Account $account)
     {
+        /** @var Channel[] $content */
         $content = $this->client->getAccountResource()
             ->getGenres($account->getLocation())
             ->exec()
@@ -173,6 +177,6 @@ class AccountResourceTest extends CustomApiTestCase
             $this->markTestSkipped('You must set $_ENV[\'ACCOUNT_NAME\'] first!');
         }
         parent::setUp();
-        $this->config->set(ConfigInterface::ACCOUNT_NAME, $_ENV['ACCOUNT_NAME']);
+        $this->accountName = $_ENV['ACCOUNT_NAME'];
     }
 }

@@ -111,8 +111,7 @@ class Client
     private function resourceFactory()
     {
         if (!$this->resourceFactory) {
-            $payload = $this->getTokenPayload();
-            $this->resourceFactory = new ResourceFactory(static::$apiResources, $this, $payload);
+            $this->resourceFactory = new ResourceFactory(static::$apiResources, $this);
         }
 
         return $this->resourceFactory;
@@ -122,7 +121,7 @@ class Client
      * @return JWTPayload
      * @throws InvalidJWTPayload
      */
-    protected function getTokenPayload()
+    public function getTokenPayload()
     {
         try {
             $jwt = $this->getToken();

@@ -4,7 +4,6 @@ namespace EpgClient\Resource;
 
 use EpgClient\Client;
 use EpgClient\Context\AbstractContext;
-use EpgClient\Token\JWTPayload;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractResource
@@ -34,11 +33,6 @@ abstract class AbstractResource
     public function __construct(Client $client)
     {
         $this->client = $client;
-    }
-
-    public function init(JWTPayload $payload)
-    {
-        // Nothing here
     }
 
     public function get($location = null)
