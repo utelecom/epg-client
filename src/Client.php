@@ -133,6 +133,21 @@ class Client
     }
 
     /**
+     * @param string $authType
+     */
+    public function setAuthType($authType)
+    {
+        switch ($authType) {
+            case self::AUTH_TYPE_JWT:
+            case self::AUTH_TYPE_API_KEY:
+                $this->authType = $authType;
+                break;
+            default:
+                throw new \UnexpectedValueException("Unknown auth type {$authType}");
+        }
+    }
+
+    /**
      * @return string
      */
     private function getToken()

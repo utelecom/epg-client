@@ -20,6 +20,7 @@ $config->set($config::API_URL, 'https://<api_url>');
 $config->set($config::API_KEY, '<your_api_key>');
 
 $client = new EpgClient\Client($config);
+$client->setAuthType(EpgClient\Client::AUTH_TYPE_API_KEY);
 $client->setAcceptLanguage(EpgClient\Client::LANG_UK); #optional
 ```
 
