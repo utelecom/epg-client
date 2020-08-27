@@ -8,7 +8,10 @@ class AccountProgramResource extends AbstractResource
 {
     const FILTER_CHANNEL = 'channel';
     const FILTER_PERIOD = 'period';
+
     const PERIOD_NOW = 'now';
+    const PERIOD_LATEST = 'latest';
+    const PERIOD_TODAY = 'today';
 
     protected static $baseLocation = '/api/account_programs';
 
@@ -26,7 +29,7 @@ class AccountProgramResource extends AbstractResource
 
     public function getByChannel(Channel $channel)
     {
-        $this->reset();
+        parent::get();
         $this->addFilter(self::FILTER_CHANNEL, $channel->getId());
         $this->method = 'GET';
 
@@ -35,7 +38,7 @@ class AccountProgramResource extends AbstractResource
 
     public function getByChannelId($channelId)
     {
-        $this->reset();
+        parent::get();
         $this->addFilter(self::FILTER_CHANNEL, $channelId);
         $this->method = 'GET';
 
@@ -46,13 +49,17 @@ class AccountProgramResource extends AbstractResource
      * now        - Current program
      * latest     - Current program with the several next ones (limited by `itemsPerPage`)
      * today      - Today programs
-     * timestamp  - Any timestamp in the middle of the day, based on which the start and end of the day will be calculated
-     * YYYY-mm-dd - Date of the day
+     * timestamp  - Any timestamp in the middle of the day, based on which the start and end of the day will be
+     * calculated YYYY-mm-dd - Date of the day
      *
      * @param string $period
+     *
+     * @return AccountProgramResource
      */
     public function setPeriod($period)
     {
         $this->addFilter(self::FILTER_PERIOD, $period);
+
+        return $this;
     }
 }
