@@ -45,7 +45,7 @@ class Channel extends AbstractContext
     {
         $translations = $this->translations;
         $translations[$locale]['locale'] = $locale;
-        $translations[$locale]['genreTitle'] = $title;
+        $translations[$locale]['genre'] = $title;
 
         $this->translations = $translations;
     }
