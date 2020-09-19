@@ -8,9 +8,9 @@ namespace EpgClient\Context;
  * @package EpgClient\AccountContext
  *
  * @property-read string $id
- * @property-read string $poster
  * @property-read string $title
  * @property-read string $prefix
+ * @property-read string $poster
  */
 class AccountCategory extends AbstractContext
 {

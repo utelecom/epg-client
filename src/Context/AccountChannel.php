@@ -13,8 +13,10 @@ namespace EpgClient\Context;
  * @property-read string $logo
  * @property-read string $title
  * @property-read string $genre
- * @property-read bool   $hasEpg
  * @property-read string $siteUrl
+ * @property-read bool   $hasEpg
+ * @property-read bool   $catchupAvailable
+ * @property-read int    $catchupFromUtc
  */
 class AccountChannel extends AbstractContext
 {

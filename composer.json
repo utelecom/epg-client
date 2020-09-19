@@ -1,7 +1,7 @@
 {
     "name": "utg/epg-client",
     "description": "HTTP Client for EPG API",
-    "version": "1.3.3+api.0.6",
+    "version": "2.0+api.0.7",
     "type": "library",
     "license": "proprietary",
     "authors": [
