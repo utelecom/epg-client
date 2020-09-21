@@ -29,6 +29,8 @@ abstract class AbstractResource
     private $options;
     /** @var string */
     private $acceptLanguage;
+    /** @var int */
+    private $itemsPerPage;
 
     public function __construct(Client $client)
     {
@@ -108,11 +110,11 @@ abstract class AbstractResource
             $items = self::contentParseCollectionItems($data);
             if (count($items) > 1) {
                 throw new \RuntimeException("Response collection with more than one item");
-            } elseif (count($items) === 0) {
-                return null;
-            } else {
-                $item = reset($items);
             }
+            if (count($items) === 0) {
+                return null;
+            }
+            $item = reset($items);
         } else {
             $item = $data;
         }
@@ -212,6 +214,12 @@ abstract class AbstractResource
             || ($this->method === 'DELETE' && $this->response->getStatusCode() === 204);
     }
 
+    /**
+     * @param string $property
+     * @param string $value
+     *
+     * @return $this
+     */
     public function addFilter($property, $value)
     {
         $this->filters[$property] = $value;
@@ -219,6 +227,11 @@ abstract class AbstractResource
         return $this;
     }
 
+    /**
+     * @param string $groupName
+     *
+     * @return $this
+     */
     public function withGroup($groupName)
     {
         $this->groups[$groupName] = true;
@@ -233,8 +246,19 @@ abstract class AbstractResource
         return $this;
     }
 
+    /**
+     * @param string $lang
+     */
     public function setLanguage($lang)
     {
         $this->acceptLanguage = $lang;
+    }
+
+    /**
+     * @param int $value
+     */
+    public function itemsPerPage($value)
+    {
+        $this->itemsPerPage = (int)$value;
     }
 }

@@ -100,6 +100,16 @@ $programs = $client->getAccountProgramResource()
     ->getArrayResult();
 
 /**
+ * Search program by title
+ */
+$programs = $client->getAccountProgramResource()
+   ->getByTitle('Program title')
+   ->setPeriod(AccountProgramResource::PERIOD_MONTH)
+   ->limit(10)
+   ->exec()
+   ->getArrayResult();
+
+/**
  * @var string $programId 
  * @var EpgClient\Context\AccountProgram $program 
  */
@@ -107,6 +117,7 @@ $program = $client->getAccountProgramResource()
    ->get($programId)
    ->exec()
    ->getSingleResult();
+
 ```
 
 ## Manage entities 

@@ -8,10 +8,13 @@ class AccountProgramResource extends AbstractResource
 {
     const FILTER_CHANNEL = 'channel';
     const FILTER_PERIOD = 'period';
+    const FILTER_TITLE = 'title';
 
     const PERIOD_NOW = 'now';
     const PERIOD_LATEST = 'latest';
     const PERIOD_TODAY = 'today';
+    const PERIOD_WEEK = 'week';
+    const PERIOD_MONTH = 'month';
 
     protected static $baseLocation = '/api/account_programs';
 
@@ -31,7 +34,6 @@ class AccountProgramResource extends AbstractResource
     {
         parent::get();
         $this->addFilter(self::FILTER_CHANNEL, $channel->getId());
-        $this->method = 'GET';
 
         return $this;
     }
@@ -40,7 +42,14 @@ class AccountProgramResource extends AbstractResource
     {
         parent::get();
         $this->addFilter(self::FILTER_CHANNEL, $channelId);
-        $this->method = 'GET';
+
+        return $this;
+    }
+
+    public function getByTitle($title)
+    {
+        parent::get();
+        $this->addFilter(self::FILTER_TITLE, $title);
 
         return $this;
     }
