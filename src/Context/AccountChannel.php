@@ -13,6 +13,7 @@ namespace EpgClient\Context;
  * @property-read string $logo
  * @property-read string $title
  * @property-read string $genre
+ * @property-read string $genrePoster
  * @property-read string $siteUrl
  * @property-read bool   $hasEpg
  * @property-read bool   $catchupAvailable
