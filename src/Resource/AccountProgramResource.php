@@ -36,25 +36,22 @@ class AccountProgramResource extends AbstractResource
     public function getByChannel(Channel $channel)
     {
         parent::get();
-        $this->addFilter(self::FILTER_CHANNEL, $channel->getId());
 
-        return $this;
+        return $this->addFilter(self::FILTER_CHANNEL, $channel->getId());
     }
 
     public function getByChannelId($channelId)
     {
         parent::get();
-        $this->addFilter(self::FILTER_CHANNEL, $channelId);
 
-        return $this;
+        return $this->addFilter(self::FILTER_CHANNEL, $channelId);
     }
 
     public function getByChannelsId(array $channelsId)
     {
         parent::get();
-        $this->addFilter(self::FILTER_CHANNELS, implode(',', $channelsId));
 
-        return $this;
+        return $this->addFilter(self::FILTER_CHANNELS, implode(',', $channelsId));
     }
 
     /**
@@ -66,9 +63,8 @@ class AccountProgramResource extends AbstractResource
     public function getByTitle($title)
     {
         parent::get();
-        $this->addFilter(self::FILTER_TITLE, $title);
 
-        return $this;
+        return $this->addFilter(self::FILTER_TITLE, $title);
     }
 
     /**
