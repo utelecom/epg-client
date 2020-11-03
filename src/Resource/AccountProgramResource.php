@@ -7,8 +7,11 @@ use EpgClient\Context\Channel;
 class AccountProgramResource extends AbstractResource
 {
     const FILTER_CHANNEL = 'channel';
+    const FILTER_CHANNELS = 'channels';
     const FILTER_PERIOD = 'period';
     const FILTER_TITLE = 'title';
+    const FILTER_CATEGORY_NAME = 'categoryName';
+    const FILTER_GENRE_NAME = 'genreName';
 
     const PERIOD_NOW = 'now';
     const PERIOD_LATEST = 'latest';
@@ -46,6 +49,20 @@ class AccountProgramResource extends AbstractResource
         return $this;
     }
 
+    public function getByChannelsId(array $channelsId)
+    {
+        parent::get();
+        $this->addFilter(self::FILTER_CHANNELS, implode(',', $channelsId));
+
+        return $this;
+    }
+
+    /**
+     * @param string $title
+     *
+     * @return $this
+     * @deprecated please use addFilter($resource::FILTER_TITLE, 'Some Title')
+     */
     public function getByTitle($title)
     {
         parent::get();

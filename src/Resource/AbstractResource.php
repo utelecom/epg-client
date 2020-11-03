@@ -8,6 +8,9 @@ use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractResource
 {
+    const FILTER_PAGE = 'page';
+    const FILTER_ITEMS_PER_PAGE = 'itemsPerPage';
+
     /** @var string */
     protected static $baseLocation;
 
@@ -29,8 +32,6 @@ abstract class AbstractResource
     private $options;
     /** @var string */
     private $acceptLanguage;
-    /** @var int */
-    private $itemsPerPage;
 
     public function __construct(Client $client)
     {
@@ -173,15 +174,16 @@ abstract class AbstractResource
 
     public function exec()
     {
-        if (!$this->method) {
+        if (empty($this->method)) {
             throw new \InvalidArgumentException("HTTP `method` does not set!");
-        } elseif (!$this->location) {
+        }
+        if (empty($this->location)) {
             throw new \InvalidArgumentException("Resource `location` does not set!");
         }
 
         $query = [];
-        $this->options and $query += $this->options;
-        $this->filters and $query += $this->filters;
+        $this->options and $query = array_merge($query, $this->options);
+        $this->filters and $query = array_merge($query, $this->filters);
         $this->groups and $query['groups'] = array_keys($this->groups);
         $this->acceptLanguage and $query['locale'] = $this->acceptLanguage;
 
@@ -259,6 +261,14 @@ abstract class AbstractResource
      */
     public function itemsPerPage($value)
     {
-        $this->itemsPerPage = (int)$value;
+        $this->addFilter(self::FILTER_ITEMS_PER_PAGE, (int)$value);
+    }
+
+    /**
+     * @param int $value signed int, where `0` is the current page
+     */
+    public function setPage($value)
+    {
+        $this->addFilter(self::FILTER_PAGE, (int)$value);
     }
 }
