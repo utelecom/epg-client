@@ -258,17 +258,19 @@ abstract class AbstractResource
 
     /**
      * @param int $value
+     * @return AbstractResource
      */
     public function itemsPerPage($value)
     {
-        $this->addFilter(self::FILTER_ITEMS_PER_PAGE, (int)$value);
+        return $this->addFilter(self::FILTER_ITEMS_PER_PAGE, (int)$value);
     }
 
     /**
      * @param int $value signed int, where `0` is the current page
+     * @return AbstractResource
      */
     public function setPage($value)
     {
-        $this->addFilter(self::FILTER_PAGE, (int)$value);
+        return $this->addFilter(self::FILTER_PAGE, (int)$value);
     }
 }
