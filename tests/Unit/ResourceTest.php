@@ -13,8 +13,9 @@ use EpgClient\Tests\Fixtures\DummyResponse;
 
 /**
  * Class ResourceTest
+ *
  * @package Tests\Unit
- * @group Unit
+ * @group   Unit
  */
 class ResourceTest extends CustomTestCase
 {
@@ -27,13 +28,16 @@ class ResourceTest extends CustomTestCase
 
     /**
      * @dataProvider getCollectionProvider
+     *
      * @param array $responseData
      */
     public function testGetCollection($responseData)
     {
         $this->response->method('getStatusCode')->willReturn(200);
         $this->clientMock->method('responseToArray')->willReturn($responseData);
-        $this->clientMock->expects($this->once())->method('request')->with('GET', '/api/dummies', null);
+        $this->clientMock->expects(self::once())
+            ->method('request')
+            ->with('GET', '/api/dummies', null);
 
         /** @var DummyContext[] $content */
         $content = $this->resource
@@ -44,8 +48,8 @@ class ResourceTest extends CustomTestCase
 
         /** @var DummyContext $item */
         $item = reset($content);
-        $this->assertEquals('/api/dummies/1', $item->getLocation());
-        $this->assertEquals('Dummy', $item->getType());
+        self::assertEquals('/api/dummies/1', $item->getLocation());
+        self::assertEquals('Dummy', $item->getType());
     }
 
     public function getCollectionProvider()
@@ -62,8 +66,8 @@ class ResourceTest extends CustomTestCase
                                 '@id'           => '/api/dummies/1',
                                 '@type'         => 'Dummy',
                                 'nestedContext' => [
-                                    '@id'      => '/api/dummies/2',
-                                    '@type'    => 'Dummy',
+                                    '@id'   => '/api/dummies/2',
+                                    '@type' => 'Dummy',
                                 ],
                             ],
                         ],
@@ -75,13 +79,16 @@ class ResourceTest extends CustomTestCase
 
     /**
      * @dataProvider getOneProvider
+     *
      * @param array $responseData
      */
     public function testGetOneByLocation($responseData)
     {
         $this->response->method('getStatusCode')->willReturn(200);
         $this->clientMock->method('responseToArray')->willReturn($responseData);
-        $this->clientMock->expects($this->once())->method('request')->with('GET', '/api/dummies/1', null);
+        $this->clientMock->expects(self::once())
+            ->method('request')
+            ->with('GET', '/api/dummies/1', null);
 
         /** @var DummyContext $content */
         $content = $this->resource
@@ -97,9 +104,9 @@ class ResourceTest extends CustomTestCase
         return [
             [
                 [
-                    '@context'         => '/api/contexts/Dummy',
-                    '@id'              => '/api/dummies/1',
-                    '@type'            => 'Dummy',
+                    '@context' => '/api/contexts/Dummy',
+                    '@id'      => '/api/dummies/1',
+                    '@type'    => 'Dummy',
                 ],
             ]
         ];

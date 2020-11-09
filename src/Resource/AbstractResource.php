@@ -10,6 +10,7 @@ abstract class AbstractResource
 {
     const FILTER_PAGE = 'page';
     const FILTER_ITEMS_PER_PAGE = 'itemsPerPage';
+    const FILTER_ORDER = 'order';
 
     /** @var string */
     protected static $baseLocation;
@@ -149,6 +150,7 @@ abstract class AbstractResource
 
     /**
      * @param array $options Allowed options: `indexBy`
+     *
      * @return AbstractContext[]
      */
     public function getArrayResult($options = [])
@@ -217,14 +219,18 @@ abstract class AbstractResource
     }
 
     /**
-     * @param string $property
-     * @param string $value
+     * @param string          $property
+     * @param string|string[] $value
      *
      * @return $this
      */
     public function addFilter($property, $value)
     {
-        $this->filters[$property] = $value;
+        if (!isset($this->filters[$property])) {
+            $this->filters[$property] = $value;
+        } elseif (is_array($this->filters[$property])) {
+            $this->filters[$property] = array_replace($this->filters[$property], (array)$value);
+        }
 
         return $this;
     }
@@ -258,6 +264,7 @@ abstract class AbstractResource
 
     /**
      * @param int $value
+     *
      * @return AbstractResource
      */
     public function itemsPerPage($value)
@@ -266,11 +273,25 @@ abstract class AbstractResource
     }
 
     /**
-     * @param int $value signed int, where `0` is the current page
+     * @param int $value unsigned int, where `0` is the current page
+     *
      * @return AbstractResource
      */
     public function setPage($value)
     {
         return $this->addFilter(self::FILTER_PAGE, (int)$value);
+    }
+
+    /**
+     * @param string $property
+     * @param bool   $reverseDirection
+     *
+     * @return AbstractResource
+     */
+    public function addOrderBy($property, $reverseDirection = false)
+    {
+        $value[$property] = $reverseDirection ? 'desc' : 'asc';
+
+        return $this->addFilter(self::FILTER_ORDER, $value);
     }
 }

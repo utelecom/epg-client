@@ -6,9 +6,11 @@ use EpgClient\Context\Channel;
 
 class AccountProgramResource extends AbstractResource
 {
+    const FILTER_START = 'start';
+    const FILTER_STOP = 'stop';
+    const FILTER_PERIOD = 'period';
     const FILTER_CHANNEL = 'channel';
     const FILTER_CHANNELS = 'channels';
-    const FILTER_PERIOD = 'period';
     const FILTER_TITLE = 'title';
     const FILTER_CATEGORY_NAME = 'categoryName';
     const FILTER_GENRE_NAME = 'genreName';
@@ -18,6 +20,8 @@ class AccountProgramResource extends AbstractResource
     const PERIOD_TODAY = 'today';
     const PERIOD_WEEK = 'week';
     const PERIOD_MONTH = 'month';
+
+    const ORDER_BY_START = 'start';
 
     protected static $baseLocation = '/api/account_programs';
 
@@ -80,8 +84,26 @@ class AccountProgramResource extends AbstractResource
      */
     public function setPeriod($period)
     {
-        $this->addFilter(self::FILTER_PERIOD, $period);
+        return $this->addFilter(self::FILTER_PERIOD, $period);
+    }
 
-        return $this;
+    /**
+     * @param int $timestamp
+     *
+     * @return AccountProgramResource
+     */
+    public function setStart($timestamp)
+    {
+        return $this->addFilter(self::FILTER_START, $timestamp);
+    }
+
+    /**
+     * @param int $timestamp
+     *
+     * @return AccountProgramResource
+     */
+    public function setStop($timestamp)
+    {
+        return $this->addFilter(self::FILTER_STOP, $timestamp);
     }
 }

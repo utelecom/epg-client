@@ -12,7 +12,7 @@ class CustomTestCase extends \PHPUnit_Framework_TestCase
      */
     public function assertApiResponseCollection($expectedClass, $content)
     {
-        $this->assertTrue(is_array($content));
+        self::assertTrue(is_array($content));
         $item = reset($content);
         $this->assertApiResponseSingleResult($expectedClass, $item);
     }
@@ -23,6 +23,6 @@ class CustomTestCase extends \PHPUnit_Framework_TestCase
      */
     public function assertApiResponseSingleResult($expectedClass, $content)
     {
-        $this->assertInstanceOf($expectedClass, $content);
+        self::assertInstanceOf($expectedClass, $content);
     }
 }
