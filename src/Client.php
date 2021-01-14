@@ -193,6 +193,7 @@ class Client
                 'base_uri'    => $this->config->get(ConfigInterface::API_URL),
                 'http_errors' => false,
                 'cookies'     => true,
+                'timeout'     => $this->config->get(ConfigInterface::TIMEOUT) ?: 1,
             ]);
         }
 

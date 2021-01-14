@@ -4,6 +4,7 @@ namespace EpgClient;
 
 interface ConfigInterface
 {
+    const TIMEOUT = 'TIMEOUT';
     const API_URL = 'API_URL';
     const API_ADMIN = 'API_ADMIN';
     const API_PASSWORD = 'API_PASSWORD';
