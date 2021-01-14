@@ -81,9 +81,9 @@ class Client
     /** @var \GuzzleHttp\Client */
     private $httpClient;
     /** @var string */
-    private $acceptLanguage;
-    /** @var string */
     private $authType = self::AUTH_TYPE_JWT;
+    /** @var array<string, string> */
+    private $headers;
 
     public function __construct(ConfigInterface $config)
     {
@@ -257,11 +257,29 @@ class Client
      */
     public function setAcceptLanguage($lang)
     {
-        $this->acceptLanguage = $lang;
+        $this->headers['Accept-Language'] = $lang;
     }
 
+    /**
+     * @param string $userAgent
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->headers['User-Agent'] = $userAgent;
+    }
+
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param array  $body
+     *
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
     public function request($method, $uri, $body = [])
     {
+        $headers = $this->headers;
+
         // Auth header
         if ($this->authType === self::AUTH_TYPE_API_KEY) {
             $headers['X-AUTH-TOKEN'] = $this->config->get(ConfigInterface::API_KEY);
@@ -269,14 +287,9 @@ class Client
             $headers['Authorization'] = 'Bearer ' . $this->getToken();
         }
         // Content-Type header
-        if ($body and strtoupper($method) !== 'GET') {
+        if ($body && strtoupper($method) !== 'GET') {
             $headers['Content-Type'] = 'application/ld+json';
         }
-        // Accept language header
-        if ($this->acceptLanguage) {
-            $headers['Accept-Language'] = $this->acceptLanguage;
-        }
-
         // Make request
         $response = $this->getClient()->request($method, $uri, [
             'headers' => $headers,
@@ -294,5 +307,4 @@ class Client
 
         return $response;
     }
-
 }
